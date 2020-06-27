@@ -1,4 +1,4 @@
 FROM openjdk:8
 EXPOSE 9090
-ADD target/dockerfile.jar dockerfile.jar
-ENTRYPOINT ["java", "-jar", "/dockerfile.jar"]
+ADD target/sparkjava-hello-world-1.0.war sparkjava-hello-world-1.0.war
+ENTRYPOINT ["java", "-war", "/sparkjava-hello-world-1.0.war"]
