@@ -1,48 +1,30 @@
-pipeline {
-	agent any
-	stages {
-		stage('compile') {
-			steps {
-				echo "Compiled Successfully!!";
-			}
-		}
-		
-		stage('JUnit') {
-			steps {
-					echo "JUnit Passed Successfully!!";
-			}
-		}
-		
-		stage('Quality-Gate') {
-			steps {
-					echo "SonarQube Quality Gate passed successfully!!";
-					
-			}
-		}
-		
-		stage('Deploy') {
-			steps {
-					echo "Pass!";
-			}
-		}
-		
-	}
-	post {
-		always {
-			echo 'This will always run'
-		}
-		success {
-			echo 'This will run only if successful'
-		}
-		failure {
-			echo 'This will run only if failed'
-		}
-		unstable {
-			echo 'This will run was marked as unstable'
-		}
-		changed {
-			echo 'This will run only if the state of the pipeline has changed'
-			echo 'For example, if the pipeline was previously failing but is now successful'
-		}
-	}
+node{
+   stage('SCM Checkout')
+   {
+     git 'https://github.com/asdjkbfhjabf123/TestJob.git'
+   }
+   stage('Compile-Package')
+   {
+   //    Get maven home path here
+       def mvnHome =  tool name: 'maven', type: 'maven'   
+       sh "${mvnHome}/bin/mvn package"
+   } 
+   stage('SonarQube Analysis') {
+        def mvnHome =  tool name: 'maven', type: 'maven'
+        withSonarQubeEnv('sonar') { 
+          sh "${mvnHome}/bin/mvn sonar:sonar"
+        }
+    
+    }
+      stage ('Build Docker Image') {
+     sh 'docker build -t 853306/my-app:1 .'
+   }
+   
+   stage('Push Docker image'){
+   withCredentials([string(credentialsId: 'docker_id', variable: 'docker_password')]) {
+   sh "docker login -u 853306 -p ${docker_password}"
+}
+  
+   sh 'docker push 853306/my-app:1'
+}
 }
