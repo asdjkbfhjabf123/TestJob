@@ -9,8 +9,9 @@ pipeline {
 
 		stage('JUnit') {
 			steps {
-               				echo 'Test was successful'
+					echo "JUnit Passed Successfully!!";
 			}
+		}
 
 		stage('Quality-Gate') {
 			steps {
@@ -44,5 +45,4 @@ pipeline {
 			echo 'For example, if the pipeline was previously failing but is now successful'
 		}
 	}
-}
 }
