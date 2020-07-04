@@ -7,9 +7,10 @@ pipeline {
 			}
 		}
 
-		stage('JUnit') {
+		stage('build & SonarQube analysis') {
 			steps {
-					echo "JUnit Passed Successfully!!";
+					withSonarQubeEnv('My SonarQube Server') {
+               				sh 'mvn clean package sonar:sonar'
 			}
 		}
 
