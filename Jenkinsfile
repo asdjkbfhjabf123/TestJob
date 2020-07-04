@@ -7,7 +7,7 @@ pipeline {
 			}
 		}
 
-		stage('JUnit') {
+		stage('Sonarqube') {
 			steps {
 					echo "JUnit Passed Successfully!!";
 			}
